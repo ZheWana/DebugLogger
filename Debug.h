@@ -56,9 +56,10 @@ case LOG_LEVEL_ERROR:ErrorLog(__msg,##__VA_ARGS__);break;                   \
 #if (LOG_LEVEL& LOG_LEVEL_DATA)
 #define DataLog(__datamsg, ...) UART_printf(&DEBUG_UART_HANDLE,__datamsg,##__VA_ARGS__)
 #else
+#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
 #define DataLog(...) do{}while(0)
 #if (LOG_LEVEL& LOG_LEVEL_DEBUG)
-#define DebugLog(__dbgmsg, ...) UART_printf(&DEBUG_UART_HANDLE,/*"[Debug]:"*/__dbgmsg,##__VA_ARGS__)
+#define DebugLog(__dbgmsg, ...) UART_printf(&DEBUG_UART_HANDLE,"[Debug]:"__dbgmsg,##__VA_ARGS__)
 #else
 #define DebugLog(...) do{}while(0)
 #endif//(LOG_LEVEL & LOG_LEVEL_DEBUG)
@@ -85,6 +86,7 @@ case LOG_LEVEL_ERROR:ErrorLog(__msg,##__VA_ARGS__);break;                   \
 #if (LOG_LEVEL& LOG_LEVEL_DATA)
 #define DataLog(__datamsg, ...) UART_printf(__datamsg,##__VA_ARGS__)
 #else
+#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
 #define DataLog(...) do{}while(0)
 #if (LOG_LEVEL& LOG_LEVEL_DEBUG)
 #define DebugLog(__dbgmsg, ...) UART_printf("[Debug]:"__dbgmsg,##__VA_ARGS__)
