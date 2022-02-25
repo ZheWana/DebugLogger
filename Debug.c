@@ -8,7 +8,8 @@
 #include "Debug.h"
 
 #ifdef USE_HAL_DRIVER
-int UART_printf(UART_HandleTypeDef *huart, const char *fmt, ...) {
+int UART_printf(UART_HandleTypeDef* huart, const char* fmt, ...)
+{
     va_list ap;
     va_start(ap, fmt);
 
@@ -17,23 +18,30 @@ int UART_printf(UART_HandleTypeDef *huart, const char *fmt, ...) {
 
     length = vsnprintf(buffer, 128, fmt, ap);
 
-    HAL_UART_Transmit(huart, (uint8_t *) buffer, length, HAL_MAX_DELAY);
+    HAL_UART_Transmit(huart, (uint8_t*)buffer, length, HAL_MAX_DELAY);
 
     va_end(ap);
     return length;
 }
-#endif//USE_HAL_DRIVER
+#endif // USE_HAL_DRIVER
 
 #ifdef DeviceFamily_TM4C12x
-//int UART_printf(const char *fmt, ...) {
-//    va_list ap;
-//    va_start(ap, fmt);
-//    int length;
-//    char buffer[256];
-//    length = vsnprintf(buffer, 256, fmt, ap);
-//    for (int i = 0; i < length; i++)
-//        UARTCharPut(UART0_BASE, buffer[i]);
-//    va_end(ap);
-//    return length;
-//}
-#endif//DeviceFamily_TM4C12x
+int UART_printf(const char* fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    int length;
+    char buffer[256];
+    length = vsnprintf(buffer, 256, fmt, ap);
+    for (int i = 0; i < length; i++)
+        UARTCharPut(UART0_BASE, buffer[i]);
+    va_end(ap);
+    return length;
+}
+#endif // DeviceFamily_TM4C12x
+
+#ifdef USE_RETARGET_PRINTF
+
+// retarget printf here or else where
+
+#endif

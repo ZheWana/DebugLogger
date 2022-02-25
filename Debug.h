@@ -20,6 +20,9 @@ int UART_printf(UART_HandleTypeDef *huart, const char *fmt, ...);
 #include "utils/uartstdio.h"
 int UART_printf(const char *fmt, ...);
 #endif//DeviceFamily_TM4C12x
+#ifdef USE_RETARGET_PRINTF
+#include"stdio.h"
+#endif//USE_RETARGET_PRINTF
 
 #define DEBUG_UART_HANDLE huart1
 
@@ -56,8 +59,8 @@ case LOG_LEVEL_ERROR:ErrorLog(__msg,##__VA_ARGS__);break;                   \
 #if (LOG_LEVEL& LOG_LEVEL_DATA)
 #define DataLog(__datamsg, ...) UART_printf(&DEBUG_UART_HANDLE,__datamsg,##__VA_ARGS__)
 #else
-#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
 #define DataLog(...) do{}while(0)
+#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
 #if (LOG_LEVEL& LOG_LEVEL_DEBUG)
 #define DebugLog(__dbgmsg, ...) UART_printf(&DEBUG_UART_HANDLE,"[Debug]:"__dbgmsg,##__VA_ARGS__)
 #else
@@ -110,5 +113,35 @@ case LOG_LEVEL_ERROR:ErrorLog(__msg,##__VA_ARGS__);break;                   \
 #endif//(LOG_LEVEL & LOG_LEVEL_ERROR)
 
 #endif//DeviceFamily_TM4C12x
+
+#ifdef USE_RETARGET_PRINTF
+
+#if (LOG_LEVEL& LOG_LEVEL_DATA)
+#define DataLog(__datamsg, ...) printf(__datamsg,##__VA_ARGS__)
+#else
+#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
+#define DataLog(...) do{}while(0)
+#if (LOG_LEVEL& LOG_LEVEL_DEBUG)
+#define DebugLog(__dbgmsg, ...) printf("[Debug]:"__dbgmsg,##__VA_ARGS__)
+#else
+#define DebugLog(...) do{}while(0)
+#endif//(LOG_LEVEL & LOG_LEVEL_DEBUG)
+#if (LOG_LEVEL& LOG_LEVEL_INFO)
+#define InfoLog(__infomsg, ...) printf("[INFO][%s]:"__infomsg,__FUNCTION__,##__VA_ARGS__)
+#else
+#define InfoLog(...) do{}while(0)
+#endif//(LOG_LEVEL & LOG_LEVEL_INFO)
+#if (LOG_LEVEL& LOG_LEVEL_WARN)
+#define WarnLog(__warnmsg, ...) printf("[WARNING]["__FILE__"]\\n""\n[Func:%s][Line:%d]:"__warnmsg,__FUNCTION__,__LINE__,##__VA_ARGS__)
+#else
+#define WarnLog(...) do{}while(0)
+#endif//(LOG_LEVEL & LOG_LEVEL_WARN)
+#if (LOG_LEVEL& LOG_LEVEL_ERROR)
+#define ErrorLog(__errmsg, ...) printf("[ERROR]["__FILE__"]\\n""\n[Func:%s][Line:%d]:"__errmsg,__FUNCTION__,__LINE__,##__VA_ARGS__)
+#else
+#define ErrorLog(...) do{}while(0)
+#endif//(LOG_LEVEL & LOG_LEVEL_ERROR)
+
+#endif//USE_RETARGET_PRINTF
 
 #endif //DEBUG_H
