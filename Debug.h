@@ -119,8 +119,8 @@ case LOG_LEVEL_ERROR:ErrorLog(__msg,##__VA_ARGS__);break;                   \
 #if (LOG_LEVEL& LOG_LEVEL_DATA)
 #define DataLog(__datamsg, ...) printf(__datamsg,##__VA_ARGS__)
 #else
-#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
 #define DataLog(...) do{}while(0)
+#endif//(LOG_LEVEL & LOG_LEVEL_DATA)
 #if (LOG_LEVEL& LOG_LEVEL_DEBUG)
 #define DebugLog(__dbgmsg, ...) printf("[Debug]:"__dbgmsg,##__VA_ARGS__)
 #else
